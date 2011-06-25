@@ -1,10 +1,12 @@
 Description
 ---------------------------------------
-This plugins helps zipping/packaging project files
+This plugins helps zipping/packaging projects.
 
 Usage
 ---------------------------------------
-This plugins helps zipping/packaging project files
+1. Open any project on Netbeans
+2. On project pane, right click the project name and click "Set as Main Project"
+3. To start Project Zipper, click on "File" > "Project Zipper"
 
 Download
 ---------------------------------------
