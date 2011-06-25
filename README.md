@@ -8,7 +8,7 @@ This plugins helps zipping/packaging project files
 
 Download
 ---------------------------------------
-[Version 0.9 beta](https://github.com/willybarro/ProjectZipper/downloads)
+[Version 0.9 beta](https://github.com/downloads/willybarro/ProjectZipper/0.9.nbm)
 
 @TODO (to release v1.0)
 ---------------------------------------
