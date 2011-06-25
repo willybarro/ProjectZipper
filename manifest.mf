@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.willybarro.projectzipper
+OpenIDE-Module-Localizing-Bundle: com/willybarro/projectzipper/Bundle.properties
+OpenIDE-Module-Specification-Version: 0.9
+
