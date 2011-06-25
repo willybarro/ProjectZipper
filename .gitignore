@@ -1,10 +1,4 @@
 # Netbeans
-build/classes
-build/classes-generated
-build/cluster
-build/depcache
-build/public-package-jars
-build/testuserdir
-build/no-license.txt
+build
 dist
 private
