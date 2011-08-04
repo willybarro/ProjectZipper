@@ -28,6 +28,12 @@ Download
 - Write a decent .nbm/project description
 - Publish to NB community (nbplugins official site)
 
+Known Issues
+---------------------------------------
+- Empty packages being created on Windows
+- Files on the treefilechooser not sorting in normal "Directories first, files after" way
+- Messy Wizard View (Perfectionism :))
+- Ant plugin detection not working
 
 Changelog:
 ---------------------------------------
@@ -39,4 +45,4 @@ Changelog:
 
 - __v0.9__ @ 2011-06-25
  - Beginning of the project
- - Fully functional module
+ - Fully functional module (Not on Windows)
