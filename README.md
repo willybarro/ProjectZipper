@@ -8,9 +8,12 @@ Please, if you find any bug, use our [Issue Tracker](https://github.com/willybar
 
 Usage
 ---------------------------------------
-1. Open any project on Netbeans
-2. On project pane, right click the project name and click "Set as Main Project"
-3. To start Project Zipper, click on "File" > "Project Zipper"
+1. Open any project on Netbeans (if you have any project opened, go to step 2)
+2. Start Project Zipper (Click on "File" > "Project Zipper")
+3. Choose a project to start working
+4. Select the resources you wish to export
+5. Select your export location
+6. Click on "Export"
 
 Download
 ---------------------------------------
@@ -32,6 +35,7 @@ Changelog:
  - Fix: File Tree Chooser not showing contents when using the plugin on Windows
  - Added: Project Chooser dialog
  - Modified: Changed project architecture to MVC-based
+ - Modified: Usage section (this document)
 
 - __v0.9__ @ 2011-06-25
  - Beginning of the project
