@@ -10,8 +10,8 @@ Usage
 ---------------------------------------
 1. Open any project on Netbeans (if you have any project opened, go to step 2)
 2. Start Project Zipper (Click on "File" > "Project Zipper")
-3. Choose a project to start working
-4. Select the resources you wish to export
+3. Select a project
+4. Select resources you wish to export
 5. Select your export location
 6. Click on "Export"
 
