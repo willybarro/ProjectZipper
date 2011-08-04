@@ -82,7 +82,13 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>com.willybarro.projectzipper</package>
+                <package>com.willybarro.projectzipper.controller</package>
+                <package>com.willybarro.projectzipper.helper</package>
+                <package>com.willybarro.projectzipper.model</package>
+                <package>com.willybarro.projectzipper.view</package>
+            </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/CheckboxTreeFileChooser.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/CheckboxTreeFileChooser.jar</binary-origin>
