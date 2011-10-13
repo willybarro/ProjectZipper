@@ -20,12 +20,13 @@ public class ZipperListener implements TaskListener {
         if(Zipper.isCancelButtonPressed()) {
             JOptionPane.showMessageDialog(null, "Packaging cancelled by user.");
         } else {
-            JOptionPane.showMessageDialog(null, "Package sucessfully generated at:\n"+ Zipper.getDestination().getAbsolutePath());
+            JOptionPane.showMessageDialog(null, "Package sucessfully generated at:\n" + Zipper.getDestination().getAbsolutePath());
         }
+        Zipper.setCancelButtonPressed(false);
         task.removeTaskListener(this);
         
         // Re-enable buttons
-        view.setBtnExportIsLoading(false);
+        view.setIsExporting(false);
     }
     
     

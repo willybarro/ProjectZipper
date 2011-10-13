@@ -30,6 +30,7 @@ public class Zipper {
     private TreePath[] checkedPaths;
     private ArrayList<IgnorePattern> ignorePatterns;
     private Project activeProject;
+    private static boolean cancelButtonPressed = false;
     
     public Zipper(Project project) {
         this.activeProject = project;
@@ -39,14 +40,9 @@ public class Zipper {
      * Export Task
      */
     private static ExecutorTask currentTask;
-    private static boolean cancelButtonPressed = false;
     public static void setCurrentTask(ExecutorTask task) {
         currentTask = task;
-    }
-    
-    public static boolean isTaskRunning()
-    {
-        return currentTask != null;
+        Zipper.setCancelButtonPressed(false);
     }
     
     public static void stopCurrentTask()
@@ -54,20 +50,17 @@ public class Zipper {
         if(Zipper.currentTask != null) {
             Zipper.currentTask.stop();
             Zipper.currentTask = null;
-            Zipper.cancelButtonPressed = true;
+            Zipper.setCancelButtonPressed(true);
         }
     }
     
-    public static boolean isCancelButtonPressed()
-    {
+    public static void setCancelButtonPressed(boolean cancelButtonPressed) {
+        Zipper.cancelButtonPressed = cancelButtonPressed;
+    }
+    
+    public static boolean isCancelButtonPressed() {
         return Zipper.cancelButtonPressed;
     }
-    
-    public static void setCancelButtonPressed(boolean pressed)
-    {
-        Zipper.cancelButtonPressed = pressed;
-    }
-    
     
     /**
      * Export Destination
@@ -221,8 +214,10 @@ public class Zipper {
             File p = (File) c.getLastPathComponent();
             Element include = doc.createElement("include");
             
-            // Remove absolute path. On build.xml it must be relative to fileset dir
-            includePattern = p.getAbsolutePath().replace(projectAbsolutePath, "");
+            // Remove root path. On build.xml it must be relative to fileset dir
+            includePattern = p.getAbsolutePath()
+                    .replace("\\", "/")
+                    .replace(projectAbsolutePath, "");
             
             // If it's a directory, we'll get all files inside
             if(p.isDirectory()) {

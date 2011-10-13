@@ -20,6 +20,13 @@ Download
 - [Version 0.92 beta](https://github.com/downloads/willybarro/ProjectZipper/nbprojectzipper-0.92.nbm)
 - [Version 0.9 beta](https://github.com/downloads/willybarro/ProjectZipper/0.9.nbm)
 
+@TODO
+---------------------------------------
+- File tree sorting (all folders before files)
+- Iniciar o browser de arquivos na pasta do input
+- Salvar as preferencias do último export
+
+
 @TODO (to release v1.0)
 ---------------------------------------
 - JavaDoc every class and method
@@ -32,7 +39,7 @@ Download
 Changelog:
 ---------------------------------------
 - __v0.92__ @ 2011-08-03
- - Fix: File Tree Chooser not showing contents when using the plugin on Windows
+ - Fixed: File Tree Chooser not showing contents when using the plugin on Windows
  - Added: Project Chooser dialog
  - Modified: Changed project architecture to MVC-based
  - Modified: Usage section (this document)

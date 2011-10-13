@@ -64,8 +64,8 @@ public class WizardController {
                     view.getCbExportZip().isSelected());
 
             // Change button status to exporting...
-            view.setBtnExportIsLoading(true);
             Zipper.setCancelButtonPressed(false);
+            view.setIsExporting(true);
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }

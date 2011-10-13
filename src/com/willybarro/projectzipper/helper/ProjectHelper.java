@@ -23,7 +23,7 @@ abstract public class ProjectHelper {
 
     public static String getProjectAbsolutePath(Project project) {
         try {
-            return project.getProjectDirectory().getPath();
+            return project.getProjectDirectory().getPath().replace("\\", "/");
         } catch(NullPointerException e) {
             return "";
         }

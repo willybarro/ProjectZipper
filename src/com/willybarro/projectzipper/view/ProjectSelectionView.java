@@ -65,7 +65,6 @@ public class ProjectSelectionView extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
 
         setTitle(org.openide.util.NbBundle.getMessage(ProjectSelectionView.class, "ProjectSelectionView.title")); // NOI18N
-        setAlwaysOnTop(true);
         setResizable(false);
 
         listProjects.setModel(projectSelectionModel);
@@ -94,7 +93,7 @@ public class ProjectSelectionView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                     .addComponent(lblChoose)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,11 +112,11 @@ public class ProjectSelectionView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
                     .addComponent(btnOk))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-288)/2, (screenSize.height-243)/2, 288, 243);
+        setBounds((screenSize.width-288)/2, (screenSize.height-239)/2, 288, 239);
     }// </editor-fold>//GEN-END:initComponents
 
     public JList getListProjects() {
@@ -126,7 +125,11 @@ public class ProjectSelectionView extends javax.swing.JFrame {
     
     public Project getListSelectedProject() {
         ProjectSelectionModel model = (ProjectSelectionModel) getListProjects().getModel();
-        return model.get(getListProjects().getSelectedIndex());
+        int selectedIndex = getListProjects().getSelectedIndex();
+        if(selectedIndex > -1) {
+            return model.get(selectedIndex);
+        }
+        return null;
     }
 
 private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -134,10 +137,14 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 }//GEN-LAST:event_btnCancelActionPerformed
 
 private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-    this.dispose();
     Project p = getListSelectedProject();
     
-    WizardController.getDefault().showViewAction(p);
+    if(p == null) {
+        JOptionPane.showMessageDialog(null, "Please, select a project.");
+    } else {
+        this.dispose();
+        WizardController.getDefault().showViewAction(p);
+    }
 }//GEN-LAST:event_btnOkActionPerformed
 
     /**
