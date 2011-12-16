@@ -1,4 +1,4 @@
-package com.willybarro.projectzipper.view;
+package com.willybarro.projectzipper.ui;
 
 import com.willybarro.projectzipper.helper.ProjectHelper;
 import com.willybarro.projectzipper.model.ProjectSelectionModel;

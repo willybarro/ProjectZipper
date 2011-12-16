@@ -2,7 +2,7 @@ package com.willybarro.projectzipper.controller;
 
 import com.willybarro.projectzipper.lib.Zipper;
 import com.willybarro.projectzipper.lib.ZipperListener;
-import com.willybarro.projectzipper.view.WizardView;
+import com.willybarro.projectzipper.ui.WizardView;
 import com.willybarro.swing.CheckboxedTreeFileChooser;
 import java.io.File;
 import javax.swing.JOptionPane;

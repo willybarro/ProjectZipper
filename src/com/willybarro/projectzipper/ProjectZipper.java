@@ -20,7 +20,7 @@ public class ProjectZipper {
      */
     public ProjectZipper() {
         try {
-            collectMetadata();
+            this.collectMetadata();
             ProjectSelectionController.getDefault().showViewAction();
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);

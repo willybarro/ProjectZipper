@@ -8,13 +8,16 @@
  *
  * Created on Jun 19, 2011, 12:45:51 AM
  */
-package com.willybarro.projectzipper.view;
+package com.willybarro.projectzipper.ui;
 
 import com.willybarro.projectzipper.ProjectZipper;
 import com.willybarro.projectzipper.lib.Ignore;
 import com.willybarro.projectzipper.lib.IgnorePattern;
 import com.willybarro.projectzipper.helper.ProjectHelper;
 import com.willybarro.projectzipper.controller.WizardController;
+import com.willybarro.projectzipper.model.PackageTemplateListModel;
+import com.willybarro.projectzipper.packager.ClipboardPackager;
+import com.willybarro.projectzipper.packager.ConfigurationModel;
 import com.willybarro.swing.CheckboxedTreeFileChooser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,7 +74,8 @@ public class WizardView extends javax.swing.JFrame {
         lblExport = new javax.swing.JLabel();
         inputPath = new javax.swing.JTextField();
         btnBrowse = new javax.swing.JButton();
-        cbExportZip = new javax.swing.JCheckBox();
+        comboExportTo = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -97,6 +101,13 @@ public class WizardView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         checkboxedTreeFileChooser = new com.willybarro.swing.CheckboxedTreeFileChooser();
         checkboxedTreeFileChooser.setPath(this.getFileTreeChooserPath());
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listPackageTemplates = new javax.swing.JList();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        btnCopyFileListClipboard = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
 
         setTitle(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.title")); // NOI18N
         setResizable(false);
@@ -112,40 +123,37 @@ public class WizardView extends javax.swing.JFrame {
             }
         });
 
-        cbExportZip.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "Wizard.cbExportZip.text")); // NOI18N
-        cbExportZip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbExportZipActionPerformed(evt);
-            }
-        });
+        comboExportTo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Zip File", "Folder", "File List", "Ant File" }));
+
+        jLabel8.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.jLabel8.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblExport)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputPath, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(cbExportZip)))
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboExportTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblExport)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputPath, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblExport)
+                    .addComponent(comboExportTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
                     .addComponent(inputPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBrowse))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbExportZip)
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(btnBrowse)
+                    .addComponent(lblExport))
+                .addGap(84, 84, 84))
         );
 
         jLabel3.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "Wizard.jLabel3.text")); // NOI18N
@@ -194,14 +202,13 @@ public class WizardView extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(cbDotFilesAndDirectories)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbNbProject))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(inputFilepatterns, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE))))
+                                .addComponent(cbNbProject))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(inputFilepatterns))))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -266,11 +273,11 @@ public class WizardView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+                        .addComponent(jSeparator1)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addComponent(helpButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
                         .addComponent(labelExporting)
                         .addGap(4, 4, 4)
                         .addComponent(btnCancel)
@@ -298,22 +305,75 @@ public class WizardView extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(checkboxedTreeFileChooser);
 
+        listPackageTemplates.setModel(new com.willybarro.projectzipper.model.PackageTemplateListModel());
+        jScrollPane2.setViewportView(listPackageTemplates);
+
+        jButton2.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.jButton3.text")); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.jLabel2.text")); // NOI18N
+
+        btnCopyFileListClipboard.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.btnCopyFileListClipboard.text")); // NOI18N
+        btnCopyFileListClipboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyFileListClipboardActionPerformed(evt);
+            }
+        });
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
         javax.swing.GroupLayout panelResourcesLayout = new javax.swing.GroupLayout(panelResources);
         panelResources.setLayout(panelResourcesLayout);
         panelResourcesLayout.setHorizontalGroup(
             panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelResourcesLayout.createSequentialGroup()
-                .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
                     .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
+                    .addComponent(btnCopyFileListClipboard, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
+                .addGap(8, 8, 8)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(panelResourcesLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelResourcesLayout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelResourcesLayout.setVerticalGroup(
             panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelResourcesLayout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelResourcesLayout.createSequentialGroup()
+                        .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCopyFileListClipboard, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3)
+                            .addComponent(jButton2)))
+                    .addComponent(jSeparator2))
                 .addContainerGap())
         );
 
@@ -327,8 +387,7 @@ public class WizardView extends javax.swing.JFrame {
                     .addComponent(panelResources, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,16 +395,16 @@ public class WizardView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(panelResources, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(103, 103, 103))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-542)/2, (screenSize.height-653)/2, 542, 653);
+        setBounds((screenSize.width-550)/2, (screenSize.height-678)/2, 550, 678);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
@@ -405,33 +464,22 @@ public class WizardView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbDotFilesAndDirectoriesActionPerformed
 
-    private void cbExportZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbExportZipActionPerformed
-        String text = getInputPath().getText();
-        
-        // If user selected to export to zip, we need to add .zip in the input path
-        if(cbExportZip.isSelected()) {
-            // If it doesn't have .zip at the end, add it.
-            if(!text.equals("") && !text.toLowerCase().endsWith(".zip")) {
-                // If we have an ending slash, remove it.
-                if(String.valueOf(text.charAt(text.length()-1)).equals(FS)) {
-                    text = text.substring(0, text.length()-1);
-                }
-                String newText = text + ".zip";
-                getInputPath().setText(newText);
-            }
-        } else {
-        // If user selected to export on a directory, we need to remove the .zip and add "/" in the end of the input path
-            // If it have .zip at the end, remove it
-            if(!text.equals("") && text.toLowerCase().endsWith(".zip")) {
-                String newText = text.replace(".zip", "") + FS;
-                getInputPath().setText(newText);
-            }
-        }
-    }//GEN-LAST:event_cbExportZipActionPerformed
-
 private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
     WizardController.getDefault().stopBuildAction();
 }//GEN-LAST:event_btnCancelActionPerformed
+
+	private void btnCopyFileListClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyFileListClipboardActionPerformed
+            ConfigurationModel model = new ConfigurationModel(this.getCheckboxedTreeFileChooser().getCheckedPaths());
+            new ClipboardPackager(model).generate();
+	}//GEN-LAST:event_btnCopyFileListClipboardActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -448,29 +496,37 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnCopyFileListClipboard;
     private javax.swing.JButton btnExport;
     private javax.swing.JCheckBox cbDotFilesAndDirectories;
-    private javax.swing.JCheckBox cbExportZip;
     private javax.swing.JCheckBox cbGit;
     private javax.swing.JCheckBox cbHtaccess;
     private javax.swing.JCheckBox cbNbProject;
     private javax.swing.JCheckBox cbSvn;
     private com.willybarro.swing.CheckboxedTreeFileChooser checkboxedTreeFileChooser;
+    private javax.swing.JComboBox comboExportTo;
     private javax.swing.JButton helpButton;
     private javax.swing.JTextField inputFilepatterns;
     private javax.swing.JTextField inputPath;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel labelExporting;
     private javax.swing.JLabel lblExport;
+    private javax.swing.JList listPackageTemplates;
     private javax.swing.JPanel panelResources;
     // End of variables declaration//GEN-END:variables
 
@@ -560,7 +616,7 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     }
 
     public JCheckBox getCbExportZip() {
-        return cbExportZip;
+        return null;
     }
 
     public JTextField getInputFilepatterns() {

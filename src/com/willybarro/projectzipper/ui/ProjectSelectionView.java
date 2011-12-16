@@ -8,7 +8,7 @@
  *
  * Created on Aug 3, 2011, 4:35:17 PM
  */
-package com.willybarro.projectzipper.view;
+package com.willybarro.projectzipper.ui;
 
 import com.willybarro.projectzipper.controller.WizardController;
 import com.willybarro.projectzipper.model.ProjectSelectionModel;

@@ -1,6 +1,6 @@
 package com.willybarro.projectzipper.lib;
 
-import com.willybarro.projectzipper.view.WizardView;
+import com.willybarro.projectzipper.ui.WizardView;
 import javax.swing.JOptionPane;
 import org.openide.util.Task;
 import org.openide.util.TaskListener;

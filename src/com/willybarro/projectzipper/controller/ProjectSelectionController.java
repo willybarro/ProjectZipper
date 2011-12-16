@@ -1,7 +1,7 @@
 package com.willybarro.projectzipper.controller;
 
 import com.willybarro.projectzipper.helper.ProjectHelper;
-import com.willybarro.projectzipper.view.ProjectSelectionView;
+import com.willybarro.projectzipper.ui.ProjectSelectionView;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.netbeans.api.project.Project;

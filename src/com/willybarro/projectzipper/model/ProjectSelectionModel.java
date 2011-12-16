@@ -1,6 +1,5 @@
 package com.willybarro.projectzipper.model;
 
-import com.willybarro.projectzipper.helper.ProjectHelper;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import org.netbeans.api.project.Project;
