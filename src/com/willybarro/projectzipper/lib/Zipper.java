@@ -17,8 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
-import org.apache.tools.ant.module.api.support.ActionUtils;
-import org.netbeans.api.project.Project;
+import org.apache.tools.ant.Project;
 import org.openide.execution.ExecutorTask;
 
 
@@ -29,10 +28,10 @@ import org.openide.execution.ExecutorTask;
 public class Zipper {
     private TreePath[] checkedPaths;
     private ArrayList<IgnorePattern> ignorePatterns;
-    private Project activeProject;
+    private org.netbeans.api.project.Project activeProject;
     private static boolean cancelButtonPressed = false;
     
-    public Zipper(Project project) {
+    public Zipper(org.netbeans.api.project.Project project) {
         this.activeProject = project;
     }
     
@@ -103,7 +102,8 @@ public class Zipper {
             }
             if(destination.exists()) {
                 String dirFile = destination.isFile() ? "file location" : "directory";
-                throw new Exception("The "+ dirFile +" you choosed already exists.\nPlease, choose a different one.");
+                if(JOptionPane.showConfirmDialog(null, "The " + dirFile + " you choosed already exists. Overwrite?") == 1)
+                    return;
             }
 
             // Builds ANT build.xml file
@@ -119,9 +119,15 @@ public class Zipper {
 
             // Executes ant over temporary build file
             FileObject antFileObject = FileUtil.toFileObject(FileUtil.normalizeFile(antf));
-            ExecutorTask antTask = ActionUtils.runTarget(antFileObject, new String[]{"do-export"}, null);
-            antTask.addTaskListener(new ZipperListener());
-            setCurrentTask(antTask);
+            Project antProject = new Project();
+            antProject.setUserProperty("ant.file", antf.getAbsolutePath());
+            antProject.init();
+            
+            
+            
+//            ExecutorTask antTask = ActionUtils.runTarget(antFileObject, new String[]{"do-export"}, null);
+//            antTask.addTaskListener(new ZipperListener());
+//            setCurrentTask(antTask);
 
             antf.deleteOnExit();
         } catch(TransformerException e) {

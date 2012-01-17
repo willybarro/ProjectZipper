@@ -1,9 +1,11 @@
 package com.willybarro.projectzipper.packager;
 
+import com.willybarro.projectzipper.exception.PackagingException;
+import com.willybarro.projectzipper.model.AbstractPackager;
+import com.willybarro.projectzipper.model.ConfigurationModel;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
 import javax.swing.tree.TreePath;
 
 /**
@@ -15,11 +17,26 @@ public class ClipboardPackager extends AbstractPackager {
     public ClipboardPackager(ConfigurationModel configuration) {
         super(configuration);
     }
-
+    
+    /**
+     * Returns template name.
+     * @return 
+     */
     @Override
-    public boolean generate() {
+    public String getTitle() {
+        return "Clipboard";
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    @Override
+    public boolean generate() 
+        throws PackagingException
+    {
         if(this.configuration.getCheckedNodes() == null)
-            return false;
+            throw new PackagingException("No files were checked.");
         
         StringBuilder fileList = new StringBuilder();
         

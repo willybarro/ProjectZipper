@@ -4,6 +4,7 @@
  */
 package com.willybarro.projectzipper.packager;
 
+import com.willybarro.projectzipper.model.ConfigurationModel;
 import javax.swing.tree.TreePath;
 import org.junit.*;
 import static org.junit.Assert.*;

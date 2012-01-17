@@ -8,7 +8,7 @@
  *
  * Created on Aug 3, 2011, 4:35:17 PM
  */
-package com.willybarro.projectzipper.ui;
+package com.willybarro.projectzipper.view;
 
 import com.willybarro.projectzipper.controller.WizardController;
 import com.willybarro.projectzipper.model.ProjectSelectionModel;
@@ -137,13 +137,13 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 }//GEN-LAST:event_btnCancelActionPerformed
 
 private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-    Project p = getListSelectedProject();
+    Project project = getListSelectedProject();
     
-    if(p == null) {
+    if(project == null) {
         JOptionPane.showMessageDialog(null, "Please, select a project.");
     } else {
         this.dispose();
-        WizardController.getDefault().showViewAction(p);
+        WizardController.getDefault().showViewAction(project);
     }
 }//GEN-LAST:event_btnOkActionPerformed
 

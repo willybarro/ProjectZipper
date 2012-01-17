@@ -1,23 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * ProjectZipperAction.java
  *
  * Created on Jun 19, 2011, 12:45:51 AM
  */
-package com.willybarro.projectzipper.ui;
+package com.willybarro.projectzipper.view;
 
 import com.willybarro.projectzipper.ProjectZipper;
 import com.willybarro.projectzipper.lib.Ignore;
 import com.willybarro.projectzipper.lib.IgnorePattern;
 import com.willybarro.projectzipper.helper.ProjectHelper;
 import com.willybarro.projectzipper.controller.WizardController;
-import com.willybarro.projectzipper.model.PackageTemplateListModel;
+import com.willybarro.projectzipper.exception.PackagingException;
 import com.willybarro.projectzipper.packager.ClipboardPackager;
-import com.willybarro.projectzipper.packager.ConfigurationModel;
+import com.willybarro.projectzipper.model.ConfigurationModel;
+import com.willybarro.projectzipper.model.PackageTemplate;
+import com.willybarro.projectzipper.model.PackageTemplateListModel;
 import com.willybarro.swing.CheckboxedTreeFileChooser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,10 +24,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicListUI;
 import org.netbeans.api.project.Project;
 
 /**
- *
+ * Main Wizard view.
+ * 
  * @author willy
  */
 public class WizardView extends javax.swing.JFrame {
@@ -41,7 +42,7 @@ public class WizardView extends javax.swing.JFrame {
         return fileTreeChooserPath;
     }
 
-    public void setFileTreeChooserPath(String fileTreeChooserPath) {
+    private void setFileTreeChooserPath(String fileTreeChooserPath) {
         this.fileTreeChooserPath = fileTreeChooserPath;
     }
     
@@ -59,6 +60,21 @@ public class WizardView extends javax.swing.JFrame {
         
         String windowTitle = "Project Zipper: " + ProjectHelper.getProjectInfo(project).getDisplayName();
         this.setTitle(windowTitle);
+        
+        // List selection listener
+        this.listPackageTemplates.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                PackageTemplate selectedPackage = (PackageTemplate) listPackageTemplates.getSelectedValue();
+                if(selectedPackage != null) {
+                    if(selectedPackage.isNewItemButton()) {
+                        btnDeleteTemplate.setEnabled(false);
+                    } else {
+                        btnDeleteTemplate.setEnabled(true);
+                    }
+                }
+            }
+        });
     }
 
     /** This method is called from within the constructor to
@@ -103,8 +119,8 @@ public class WizardView extends javax.swing.JFrame {
         checkboxedTreeFileChooser.setPath(this.getFileTreeChooserPath());
         jScrollPane2 = new javax.swing.JScrollPane();
         listPackageTemplates = new javax.swing.JList();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSaveTemplate = new javax.swing.JButton();
+        btnDeleteTemplate = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         btnCopyFileListClipboard = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
@@ -115,6 +131,11 @@ public class WizardView extends javax.swing.JFrame {
         lblExport.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "Wizard.jLabel2.text")); // NOI18N
 
         inputPath.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "Wizard.inputPath.text")); // NOI18N
+        inputPath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputPathActionPerformed(evt);
+            }
+        });
 
         btnBrowse.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "Wizard.btnBrowse.text")); // NOI18N
         btnBrowse.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +159,7 @@ public class WizardView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblExport)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inputPath, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                .addComponent(inputPath, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -241,6 +262,7 @@ public class WizardView extends javax.swing.JFrame {
             }
         });
 
+        btnExport.setMnemonic('P');
         btnExport.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "Wizard.btnExport.text")); // NOI18N
         btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,16 +299,19 @@ public class WizardView extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addComponent(helpButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(labelExporting)
                         .addGap(4, 4, 4)
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21))))
         );
+
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCancel, btnClose, btnExport});
+
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
@@ -305,20 +330,24 @@ public class WizardView extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(checkboxedTreeFileChooser);
 
-        listPackageTemplates.setModel(new com.willybarro.projectzipper.model.PackageTemplateListModel());
+        listPackageTemplates.setModel(new com.willybarro.projectzipper.model.PackageTemplateListModel(this.activeProject));
+        listPackageTemplates.setSelectedIndex(0);
         jScrollPane2.setViewportView(listPackageTemplates);
+        listPackageTemplates.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.listPackageTemplates.AccessibleContext.accessibleName")); // NOI18N
 
-        jButton2.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnSaveTemplate.setMnemonic('S');
+        btnSaveTemplate.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.btnSaveTemplate.text")); // NOI18N
+        btnSaveTemplate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnSaveTemplateActionPerformed(evt);
             }
         });
 
-        jButton3.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.jButton3.text")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnDeleteTemplate.setText(org.openide.util.NbBundle.getMessage(WizardView.class, "WizardView.btnDeleteTemplate.text")); // NOI18N
+        btnDeleteTemplate.setEnabled(false);
+        btnDeleteTemplate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnDeleteTemplateActionPerformed(evt);
             }
         });
 
@@ -348,14 +377,18 @@ public class WizardView extends javax.swing.JFrame {
                 .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panelResourcesLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelResourcesLayout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(panelResourcesLayout.createSequentialGroup()
+                                .addComponent(btnSaveTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDeleteTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        panelResourcesLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDeleteTemplate, btnSaveTemplate});
+
         panelResourcesLayout.setVerticalGroup(
             panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelResourcesLayout.createSequentialGroup()
@@ -371,8 +404,8 @@ public class WizardView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelResourcesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCopyFileListClipboard, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)))
+                            .addComponent(btnDeleteTemplate)
+                            .addComponent(btnSaveTemplate)))
                     .addComponent(jSeparator2))
                 .addContainerGap())
         );
@@ -470,16 +503,63 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
 	private void btnCopyFileListClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyFileListClipboardActionPerformed
             ConfigurationModel model = new ConfigurationModel(this.getCheckboxedTreeFileChooser().getCheckedPaths());
-            new ClipboardPackager(model).generate();
+            
+            try {
+                new ClipboardPackager(model).generate();
+            } catch(PackagingException e) {
+              JOptionPane.showMessageDialog(null, e.getMessage());
+            }
 	}//GEN-LAST:event_btnCopyFileListClipboardActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnSaveTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTemplateActionPerformed
+        PackageTemplateListModel packageTemplateListModel = (PackageTemplateListModel) this.listPackageTemplates.getModel();
+        
+        PackageTemplate selectedTemplate = (PackageTemplate) this.listPackageTemplates.getSelectedValue();
+        String templateName;
+        if(selectedTemplate.isNewItemButton()) {
+            templateName = JOptionPane.showInputDialog(
+                null,
+                "Template name:",
+                "Save Template",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            templateName = selectedTemplate.getFile().getName();
+        }
+        
+        // @TODO Se for um novo template, verifica se o arquivo já existe e pergunta se quer dar overwrite
+        
+        if(templateName != null) {
+            if(templateName.equals("")) {
+                JOptionPane.showMessageDialog(null, "Empty names are not allowed.");
+            } else {
+                // Save template
+                boolean templateSaved = packageTemplateListModel.saveTemplate(checkboxedTreeFileChooser.getCheckedPaths(), templateName);
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+                if(templateSaved)
+                    this.listPackageTemplates.setSelectedIndex(this.listPackageTemplates.getLastVisibleIndex());
+            }
+        }
+    }//GEN-LAST:event_btnSaveTemplateActionPerformed
+
+    private void btnDeleteTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTemplateActionPerformed
+        PackageTemplate selectedTemplate = (PackageTemplate) this.listPackageTemplates.getSelectedValue();
+        if(!selectedTemplate.isNewItemButton() && 
+                JOptionPane.showConfirmDialog(null, "Delete template \""+ selectedTemplate.getTitle() +"\"?", "Delete template", JOptionPane.YES_NO_OPTION) == 0
+        ) {
+            // Get the JList actual model and tries to delete template.
+            PackageTemplateListModel packageTemplateListModel = (PackageTemplateListModel) this.listPackageTemplates.getModel();
+            boolean deletedTemplate = packageTemplateListModel.deleteTemplate(selectedTemplate);
+            
+            // Select first item on list
+//            if(deletedTemplate)
+//                this.listPackageTemplates.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_btnDeleteTemplateActionPerformed
+
+    private void inputPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPathActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_inputPathActionPerformed
 
     /**
      * @param args the command line arguments
@@ -497,7 +577,9 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnCopyFileListClipboard;
+    private javax.swing.JButton btnDeleteTemplate;
     private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnSaveTemplate;
     private javax.swing.JCheckBox cbDotFilesAndDirectories;
     private javax.swing.JCheckBox cbGit;
     private javax.swing.JCheckBox cbHtaccess;
@@ -508,8 +590,6 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JButton helpButton;
     private javax.swing.JTextField inputFilepatterns;
     private javax.swing.JTextField inputPath;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

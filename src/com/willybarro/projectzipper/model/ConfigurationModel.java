@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.willybarro.projectzipper.packager;
+package com.willybarro.projectzipper.model;
 
 import com.willybarro.projectzipper.lib.IgnorePattern;
 import java.io.File;
